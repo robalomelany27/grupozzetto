@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GRUPOZZETTO — Máquinas Agrícolas</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { brand:{ red:'#E21218', dark:'#1F1F1F', gray:'#9AA0A6', silver:'#D5D7DA' } },
+          fontFamily: { display:['Orbitron','ui-sans-serif'], body:['Roboto','ui-sans-serif'] },
+          boxShadow:{ soft:'0 10px 30px rgba(0,0,0,.12)' }
+        }
+      }
+    }
+  </script>
+  <style>
+    .badge{position:absolute;top:.6rem;left:.6rem;padding:.25rem .5rem;border-radius:.375rem;font-size:.68rem;font-weight:700}
+    .badge-nuevo{background:#E21218;color:#fff}.badge-usado{background:rgba(0,0,0,.8);color:#fff}
+    .tab{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;border-radius:9999px;border:1px solid #D5D7DA;font-size:.9rem}
+    .tab-active{background:#E21218;color:#fff;border-color:#E21218;box-shadow:0 6px 20px rgba(226,18,24,.25)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:.8rem 1.1rem;border-radius:.7rem}
+    .btn-red{background:#E21218;color:#fff}.btn-ghost{border:1px solid #D5D7DA}
+    dialog::backdrop{background:rgba(0,0,0,.45)}
+    .pager button{border:1px solid #D5D7DA;border-radius:.6rem;padding:.5rem .8rem}
+    .link-mini{font-size:.82rem}
+
+    /* --- Modal Plan --- */
+    .pill{border:1px solid #D5D7DA;border-radius:999px;padding:.35rem .8rem;cursor:pointer}
+    .pill.active{background:#E21218;color:#fff;border-color:#E21218}
+    .input{border:1px solid #D5D7DA;border-radius:.6rem;padding:.6rem .75rem;width:100%}
+    .label{font-size:.85rem;color:#5F6368}
+    .kpi{background:white;border:1px solid #ECEDEF;border-radius:1rem;padding:1rem}
+    .tabs-plan button{padding:.6rem 1rem;border-bottom:2px solid transparent}
+    .tabs-plan button.active{border-bottom-color:#E21218;color:#E21218;font-weight:600}
+    .tbl th,.tbl td{border-bottom:1px solid #eee;padding:.55rem .6rem;text-align:right}
+    .tbl th:first-child,.tbl td:first-child{text-align:left}
+    .note{font-size:.82rem;color:#6b7280}
+
+    /* Mejoras para calidad de imagen */
+    img {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+      image-rendering: pixelated;
+      image-rendering: auto;
+    }
+    
+    .hero-img, .banner-img {
+      image-rendering: auto;
+      image-rendering: -webkit-optimize-contrast;
+      -webkit-backface-visibility: hidden;
+      -moz-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-transform: translate3d(0, 0, 0);
+      -moz-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+  </style>
+</head>
+
+<body class="bg-white text-brand-dark font-body">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-brand.silver">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <img src="https://i.postimg.cc/9z9HS0gP/Picsart-25-09-30-12-04-56-999.png" alt="GRUPOZZETTO" class="h-7 w-auto" />
+      
+        </div>
+        <nav class="hidden md:flex gap-6 text-sm">
+          <a href="#productos" class="hover:text-brand-red">Nuevos</a>
+          <a href="#usados" class="hover:text-brand-red">Usados</a>
+          <a href="#contacto" class="hover:text-brand-red">Contacto</a>
+        </nav>
+        <div class="flex gap-2">
+          <button class="btn btn-ghost text-sm" onclick="document.getElementById('dlg-plan').showModal()">Plan de Ahorro</button>
+          <a href="#contacto" class="btn btn-red text-sm">Asesorate</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero (OMBU y GRUPOZZETTO) -->
+  <section class="relative">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid md:grid-cols-2 gap-8 items-center min-h-[420px] py-10 md:py-14">
+        <div>
+          <h1 class="font-display text-6xl leading-none">12 PAGOS</h1>
+          <p class="mt-1 font-display text-2xl tracking-wider">FIJOS, EN PESOS, SIN INTERES</p>
+          <p class="mt-4 text-brand-gray max-w-xl">
+            Ofrecemos maquinarias, equipos nuevos, usados y neumáticos con financiación personalizada para PYMES, empresas y transportistas. Contamos con soluciones integrales para el trabajo diario y asesoramiento comercial garantizando confianza, rendimiento y respaldo postventa.
+          </p>
+          <div class="mt-6 flex gap-3">
+          <a href="#contacto" class="btn btn-red text-sm">12 Pagos</a>
+            <a href="#productos" class="btn btn-red">Ver catálogo</a>
+            <button class="btn btn-red" onclick="document.getElementById('dlg-plan').showModal()">Plan de Ahorro</button>
+          </div>
+        </div>
+        <div>
+          <div class="aspect-[16/9] rounded-2xl bg-gradient-to-br from-brand.silver to-white shadow-soft overflow-hidden">
+            <img 
+              src="https://i.postimg.cc/3NXm3cjD/Whats-App-Image-2025-10-07-at-12-51-36.jpg" 
+              alt="Maquinaria GRUPOZZETTO" 
+              class="w-full h-full object-contain hero-img"
+              style="image-rendering: auto;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Beneficios del Plan de Ahorro -->
+  <section class="py-12 bg-gradient-to-b from-white to-brand.silver/20">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-8">
+        <h2 class="font-display text-3xl mb-4">Beneficios del <span class="text-brand-red">Plan de Ahorro</span></h2>
+        <p class="text-lg text-brand-gray max-w-2xl mx-auto">El destino del dinero, es su decisión.</p>
+        <div class="mt-4 bg-brand-red/10 rounded-lg p-4 max-w-3xl mx-auto">
+          <p class="text-sm font-semibold text-brand-red">🚀 ¡Más de 30 años garantizando el futuro de miles de familias argentinas!</p>
+          <p class="text-xs text-brand-gray mt-1">Tu inversión está respaldada por décadas de experiencia y confianza</p>
+        </div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div class="bg-white rounded-xl p-6 shadow-soft">
+          <div class="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-brand-red text-xl">🎯</span>
+          </div>
+          <h3 class="font-semibold mb-2">Adjudicaciones mensuales</h3>
+          <p class="text-sm text-brand-gray">Adjudicaciones por sorteo o licitación.</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 shadow-soft">
+          <div class="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-brand-red text-xl">💰</span>
+          </div>
+          <h3 class="font-semibold mb-2">Pago al contado</h3>
+          <p class="text-sm text-brand-gray">Pago contado del monto adjudicado.</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 shadow-soft">
+          <div class="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-brand-red text-xl">⚡</span>
+          </div>
+          <h3 class="font-semibold mb-2">Adelante cuotas</h3>
+          <p class="text-sm text-brand-gray">Puede adelantar cuotas en cualquier momento del plan y sin ningún costo.</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 shadow-soft">
+          <div class="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-brand-red text-xl">🔒</span>
+          </div>
+          <h3 class="font-semibold mb-2">Cuotas congeladas</h3>
+          <p class="text-sm text-brand-gray">Cada cuota abonada no sufre variación. Queda congelada.</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 shadow-soft">
+          <div class="w-12 h-12 bg-brand-red/10 rounded-lg flex items-center justify-center mb-4">
+            <span class="text-brand-red text-xl">🛡️</span>
+          </div>
+          <h3 class="font-semibold mb-2">Inversión segura</h3>
+          <p class="text-sm text-brand-gray">Protege sus ahorros y se capitaliza. Su inversión siempre es segura.</p>
+        </div>
+      </div>
+      
+      <div class="text-center mt-8">
+        <div class="mt-6 space-y-3">
+          <button class="btn btn-red text-lg px-8 py-3" onclick="document.getElementById('dlg-plan').showModal()">¡Quiero mi Plan Ahora!</button>
+          <p class="text-sm text-brand-gray">✅ Sin papeleos complicados • ✅ Aprobación inmediata • ✅ Comienza cuando quieras</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUEVOS -->
+  <section id="productos" class="py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-end justify-between mb-6">
+        <div>
+          <h2 class="font-display text-2xl">Catálogo de <span class="text-brand-red">Nuevos</span></h2>
+          <p class="text-sm text-brand-gray">Tolvas autodescargables, cabezales maiceros, semirremolques y más.</p>
+        </div>
+        <div class="hidden md:flex gap-2">
+          <button class="tab tab-active" data-cat="todasN">Todas</button>
+          <button class="tab" data-cat="tolvasN">Tolvas</button>
+          <button class="tab" data-cat="cabezalesN">Cabezales</button>
+          <button class="tab" data-cat="semisN">Semirremolques</button>
+          <button class="tab" data-cat="otrosN">Otros</button>
+        </div>
+      </div>
+
+      <div id="gridNuevos" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5"></div>
+
+      <!-- Paginación NUEVOS -->
+      <div class="pager mt-6 flex items-center justify-center gap-3">
+        <button id="prevN">Anterior</button>
+        <span id="infoN" class="text-sm text-brand-gray"></span>
+        <button id="nextN">Siguiente</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- USADOS -->
+  <section id="usados" class="py-10 bg-gradient-to-b from-white to-brand.silver/20 border-t border-brand.silver">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-end justify-between mb-6">
+        <div>
+          <h2 class="font-display text-2xl">Sección de <span class="text-brand-red">Usados</span></h2>
+          <p class="text-sm text-brand-gray">Unidades revisadas y listas para trabajar.</p>
+        </div>
+      </div>
+
+      <div id="gridUsados" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5"></div>
+
+      <!-- Paginación USADOS -->
+      <div class="pager mt-6 flex items-center justify-center gap-3">
+        <button id="prevU">Anterior</button>
+        <span id="infoU" class="text-sm text-brand-gray"></span>
+        <button id="nextU">Siguiente</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section id="contacto" class="py-12">
+    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-start">
+      <div>
+        <h2 class="font-display text-3xl">Asesorate con nuestro equipo</h2>
+        <p class="text-brand-gray mt-2">Contanos qué necesitás y te respondemos por WhatsApp.</p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a id="cta-wa" href="#" class="btn btn-red">WhatsApp inmediato</a>
+        </div>
+      </div>
+      <form class="bg-white rounded-2xl shadow-soft p-6 grid gap-4" onsubmit="sendFormWA(event)">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div><label class="text-sm text-brand-gray">Nombre*</label><input id="f-nombre" class="mt-1 w-full border rounded-lg px-3 py-2" required /></div>
+          <div><label class="text-sm text-brand-gray">Apellido*</label><input id="f-apellido" class="mt-1 w-full border rounded-lg px-3 py-2" required /></div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div><label class="text-sm text-brand-gray">Email*</label><input id="f-email" type="email" class="mt-1 w-full border rounded-lg px-3 py-2" required /></div>
+          <div><label class="text-sm text-brand-gray">Teléfono*</label><input id="f-tel" class="mt-1 w-full border rounded-lg px-3 py-2" required /></div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div><label class="text-sm text-brand-gray">Provincia</label><input id="f-prov" class="mt-1 w-full border rounded-lg px-3 py-2" /></div>
+          <div><label class="text-sm text-brand-gray">Localidad</label><input id="f-loc" class="mt-1 w-full border rounded-lg px-3 py-2" /></div>
+        </div>
+        <div><label class="text-sm text-brand-gray">Consulta</label><textarea id="f-msj" rows="4" class="mt-1 w-full border rounded-lg px-3 py-2" placeholder="Producto de interés, plazos, etc."></textarea></div>
+        <button class="btn btn-red" type="submit">Enviar por WhatsApp</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-12 bg-gradient-to-b from-white to-brand.silver/20">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="text-center mb-8">
+        <h2 class="font-display text-3xl mb-4">Preguntas <span class="text-brand-red">Frecuentes</span></h2>
+        <p class="text-brand-gray">Todo lo que necesitás saber sobre el Plan de Ahorro</p>
+      </div>
+
+      <div class="space-y-4">
+        <div class="bg-white rounded-lg shadow-soft overflow-hidden">
+          <button class="w-full px-6 py-4 text-left font-semibold hover:bg-gray-50 flex justify-between items-center faq-toggle" data-target="faq-1">
+            ¿Qué es un plan de ahorro?
+            <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="faq-1" class="px-6 pb-4 hidden">
+            <p class="text-brand-gray">Un plan de ahorro es un sistema de financiación que te permite acceder a un bien determinado mediante el pago de cuotas mensuales. A través de sorteos y licitaciones, podrás ser adjudicado para recibir el bien antes de terminar de pagar todas las cuotas.</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-soft overflow-hidden">
+          <button class="w-full px-6 py-4 text-left font-semibold hover:bg-gray-50 flex justify-between items-center faq-toggle" data-target="faq-2">
+            ¿Cómo funciona el sistema de adjudicación?
+            <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="faq-2" class="px-6 pb-4 hidden">
+            <p class="text-brand-gray">Todos los meses se realizan adjudicaciones por dos métodos: sorteo (gratuito y aleatorio) y licitación (ofreciendo adelantar cuotas). Los adjudicados reciben el valor total de su plan para comprar el bien inmediatamente.</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-soft overflow-hidden">
+          <button class="w-full px-6 py-4 text-left font-semibold hover:bg-gray-50 flex justify-between items-center faq-toggle" data-target="faq-3">
+            ¿Qué pasa si no soy adjudicado inmediatamente?
+            <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="faq-3" class="px-6 pb-4 hidden">
+            <p class="text-brand-gray">Continuás pagando tus cuotas mensuales y participando en cada sorteo hasta ser adjudicado. Al finalizar el plan, automáticamente recibirás el valor total para adquirir tu bien. Tu dinero está siempre seguro y se valoriza.</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-soft overflow-hidden">
+          <button class="w-full px-6 py-4 text-left font-semibold hover:bg-gray-50 flex justify-between items-center faq-toggle" data-target="faq-4">
+            ¿Puedo adelantar cuotas?
+            <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="faq-4" class="px-6 pb-4 hidden">
+            <p class="text-brand-gray">¡Sí! Podés adelantar cuotas en cualquier momento del plan sin ningún costo adicional. Esto no solo acelera tu capacidad de ahorro, sino que también puede mejorar tus chances en las licitaciones.</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-soft overflow-hidden">
+          <button class="w-full px-6 py-4 text-left font-semibold hover:bg-gray-50 flex justify-between items-center faq-toggle" data-target="faq-5">
+            ¿Las cuotas aumentan con la inflación?
+            <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="faq-5" class="px-6 pb-4 hidden">
+            <p class="text-brand-gray">Las cuotas se ajustan según la evolución del valor móvil del bien, pero cada cuota que pagás queda "congelada" y no sufre más variaciones. Esto protege tu inversión de la inflación.</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-soft overflow-hidden">
+          <button class="w-full px-6 py-4 text-left font-semibold hover:bg-gray-50 flex justify-between items-center faq-toggle" data-target="faq-6">
+            ¿Qué documentación necesito?
+            <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="faq-6" class="px-6 pb-4 hidden">
+            <p class="text-brand-gray">Solo necesitás: fotocopia de DNI (frente y dorso), declaraciones juradas UIF y de salud. El proceso es simple y rápido. Nuestros asesores te guían en todo el proceso.</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-soft overflow-hidden">
+          <button class="w-full px-6 py-4 text-left font-semibold hover:bg-gray-50 flex justify-between items-center faq-toggle" data-target="faq-7">
+            ¿Hay costos adicionales?
+            <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="faq-7" class="px-6 pb-4 hidden">
+            <p class="text-brand-gray">Los únicos costos son: Gestoría ($56.517) + Formularios ($47.155) al momento de la adjudicación, y el Derecho de Adjudicación (1% + IVA del valor móvil adjudicado). Todo transparente y sin sorpresas.</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-soft overflow-hidden">
+          <button class="w-full px-6 py-4 text-left font-semibold hover:bg-gray-50 flex justify-between items-center faq-toggle" data-target="faq-8">
+            ¿Puedo cambiar de plan o cancelar?
+            <svg class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="faq-8" class="px-6 pb-4 hidden">
+            <p class="text-brand-gray">Sí, podés cancelar tu plan en cualquier momento. Se te reintegra el dinero aportado menos los gastos administrativos correspondientes. También podés transferir tu plan a terceros.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-8">
+        <p class="text-brand-gray mb-4">¿Tenés más consultas?</p>
+        <a href="https://wa.me/5491127870031?text=Hola,%20tengo%20una%20consulta%20sobre%20el%20Plan%20de%20Ahorro" class="btn btn-red" target="_blank">Consultá con un Asesor</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-brand-dark text-white">
+    <div class="max-w-7xl mx-auto px-4 py-8 grid md:grid-cols-3 gap-6">
+      <div>
+        <div class="font-display text-xl">GRUPOZZETTO S.A.</div>
+        <p class="text-sm text-white/70">info@grupozzetto.com.ar · +54 9 1127870031</p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">Catálogo</h4>
+        <ul class="text-white/80 text-sm space-y-1">
+          <li><a href="#productos" class="hover:text-brand-red">Tolvas autodescargables</a></li>
+          <li><a href="#productos" class="hover:text-brand-red">Cabezales maiceros</a></li>
+          <li><a href="#productos" class="hover:text-brand-red">Semirremolques</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">Atención</h4>
+        <p class="text-sm text-white/70">Lun a vie de 8 a 17 h · Sáb de 8 a 12 h</p>
+        <a href="#contacto" class="inline-block mt-3 btn btn-red">Asesorate</a>
+      </div>
+    </div>
+    <div class="border-t border-white/10 py-3 text-center text-xs text-white/70">© <span id="y"></span> GRUPOZZETTO — Todos los derechos reservados.</div>
+  </footer>
+
+  <!-- MODAL: Plan de Ahorro (Calculadora + Pre-suscripción + Especificaciones) -->
+  <dialog id="dlg-plan" class="rounded-xl max-w-5xl w-[96%]">
+    <form method="dialog" class="p-0">
+      <div class="p-5 md:p-6 border-b flex items-center justify-between">
+        <h3 class="font-display text-xl">Plan de Ahorro</h3>
+        <button type="submit" class="px-3 py-1 rounded bg-brand.silver/40 hover:bg-brand.silver/60 transition">Cerrar</button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="px-5 md:px-6 pt-4 pb-2 flex gap-4 tabs-plan">
+        <button type="button" class="active" data-tab="calc">Simular financiación</button>
+        <button type="button" data-tab="pre">Pre-suscripción</button>
+        <button type="button" data-tab="spec">Especificaciones</button>
+      </div>
+
+      <!-- Contenido: CALCULADORA -->
+      <div id="tab-calc" class="p-5 md:p-6 grid md:grid-cols-2 gap-6">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="label">Tipo:</span>
+            <button type="button" id="pf" class="pill active">Persona física</button>
+            <button type="button" id="pj" class="pill">Persona jurídica</button>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="label">Valor Básico Móvil (ARS)</label>
+              <input id="vbm" type="number" class="input" min="40000000" max="72000000" step="10000" value="40000000">
+              <p class="note mt-1">Rango: $40.000.000 a $72.000.000 (múltiplos de $10.000)</p>
+            </div>
+            <div>
+              <label class="label">Cuota a visualizar</label>
+              <input id="ncuota" type="number" class="input" min="1" max="60" step="1" value="1">
+              <p class="note mt-1">Para el Seguro de Vida (0,0833% del saldo deudor)</p>
+            </div>
+            <div>
+              <label class="label">Provincia (Impuesto al Sello)</label>
+              <select id="prov" class="input">
+                <option value="otra" selected>Otra provincia</option>
+                <option value="cordoba">Córdoba</option>
+              </select>
+              <p class="note mt-1">Sello 1,2% (excepto Córdoba). Se prorratea en cuotas 1 a 6.</p>
+            </div>
+          </div>
+
+          <div class="grid sm:grid-cols-3 gap-4 mt-5">
+            <div class="kpi"><div class="text-sm text-brand-gray">Cuota Pura</div><div id="k_pura" class="text-2xl font-semibold">$ 0,00</div></div>
+            <div class="kpi"><div class="text-sm text-brand-gray">Cuota Administrativa + IVA</div><div id="k_adm" class="text-2xl font-semibold">$ 0,00</div></div>
+            <div class="kpi"><div class="text-sm text-brand-gray">Seg. de Vida</div><div id="k_seg" class="text-2xl font-semibold">$ 0,00</div></div>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-4 mt-4">
+            <div class="kpi"><div class="text-sm text-brand-gray">Total de Cuota*</div><div id="k_total" class="text-3xl font-semibold">$ 0,00</div><div class="note mt-1">*No incluye Impuesto al Sello. Incluye Imp. Déb/Cred (0,804%) sobre Cuota Pura.</div></div>
+            <div class="kpi">
+              <div class="text-sm text-brand-gray">Imp. al Sello (prorrateado 1-6)</div>
+              <div id="k_sello" class="text-2xl font-semibold">$ 0,00</div>
+            </div>
+          </div>
+
+          <div class="mt-5 flex flex-wrap gap-3">
+            <button type="button" class="btn btn-red" onclick="calc()">Calcular</button>
+            <button type="button" class="btn btn-ghost" onclick="contactAdvisor()">👨‍💼 Contactar Asesor</button>
+            <button type="button" class="btn btn-ghost" onclick="shareCalc()">Compartir</button>
+            <button type="button" class="btn btn-ghost" onclick="downloadCSV()">Descargar Cálculo</button>
+            <button type="button" class="btn btn-ghost" onclick="downloadCalcAndSpec()">Descargar Cálculo + Especificaciones</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="overflow-auto rounded-xl border">
+            <table class="w-full tbl text-sm">
+              <thead class="bg-gray-50">
+                <tr><th>#</th><th>Cuota Pura</th><th>Adm+IVA</th><th>Seg. Vida</th><th>Imp. Déb/Cred</th><th>Total s/ Sello</th><th>Sello (1-6)</th><th>Total con Sello</th><th>Saldo</th></tr>
+              </thead>
+              <tbody id="t_body"></tbody>
+            </table>
+          </div>
+          <p class="note mt-2">Se muestran 12 primeras cuotas.</p>
+        </div>
+      </div>
+
+      <!-- Contenido: PRE-SUSCRIPCIÓN -->
+      <div id="tab-pre" class="p-5 md:p-6 hidden">
+        <div class="max-w-2xl mx-auto">
+          <h4 class="font-display text-xl mb-4">Pre-suscripción al Plan de Ahorro</h4>
+          <p class="text-brand-gray mb-6">Completá tus datos y te contactamos para iniciar tu plan.</p>
+          
+          <div class="grid gap-4">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="label">Nombre*</label>
+                <input id="p-nombre" class="input" required />
+              </div>
+              <div>
+                <label class="label">Apellido*</label>
+                <input id="p-apellido" class="input" required />
+              </div>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="label">Email*</label>
+                <input id="p-email" type="email" class="input" required />
+              </div>
+              <div>
+                <label class="label">Teléfono*</label>
+                <input id="p-tel" class="input" required />
+              </div>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="label">Provincia</label>
+                <input id="p-prov" class="input" />
+              </div>
+              <div>
+                <label class="label">Localidad</label>
+                <input id="p-loc" class="input" />
+              </div>
+            </div>
+            <div>
+              <label class="label">DNI/CUIT</label>
+              <input id="p-dni" class="input" />
+            </div>
+            <div>
+              <label class="label">Valor Básico Móvil de interés (ARS)</label>
+              <select id="p-vbm" class="input">
+                <option value="40000000">$40.000.000</option>
+                <option value="45000000">$45.000.000</option>
+                <option value="50000000">$50.000.000</option>
+                <option value="55000000">$55.000.000</option>
+                <option value="60000000">$60.000.000</option>
+                <option value="65000000">$65.000.000</option>
+                <option value="70000000">$70.000.000</option>
+                <option value="72000000">$72.000.000</option>
+              </select>
+            </div>
+            <div>
+              <label class="label">Comentarios adicionales</label>
+              <textarea id="p-msj" rows="3" class="input" placeholder="Producto de interés, consultas específicas, etc."></textarea>
+            </div>
+            <button class="btn btn-red" type="button" onclick="sendPlanWA(event)">Enviar Pre-suscripción por WhatsApp</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenido: ESPECIFICACIONES -->
+      <div id="tab-spec" class="p-5 md:p-6 hidden">
+        <div class="prose max-w-none">
+          <h4 class="font-display text-xl mb-3">Especificaciones del Plan</h4>
+          <p><strong>Plazo:</strong> 60 meses / cuotas en pesos y sin interés</p>
+          <p><strong>Carga Administrativa:</strong> 8.0% fija para financiación a 5 años</p>
+          <p><strong>Adjudicaciones mensuales:</strong> por sorteo o licitación</p>
+          <p>* Si el cliente ordena un bien de <strong>MENOR</strong> valor al Valor Móvil Adjudicado, la diferencia será acreditada como cuotas adelantadas.</p>
+          <p>* Si ordena un bien de <strong>MAYOR</strong> valor al Valor Adjudicado, la diferencia será abonada por el cliente.</p>
+          <p><strong>Impuesto al sello:</strong> 1,2% para todas las provincias a excepción de Córdoba. (Se abona prorrateado en las primeras 6 cuotas)</p>
+          <p><strong>Impuesto al débito y crédito (Ley 25.413):</strong> 0,804% sobre la cuota pura mensual.</p>
+          <p><strong>Seguro de Vida:</strong> 0,0833% del saldo deudor. Hasta 64 años inclusive.</p>
+          <p><strong>Derecho de Adjudicación:</strong> 1% + IVA del valor Móvil adjudicado.</p>
+          <p><strong>Gestoría:</strong> $56.517 + <strong>Formularios</strong> $47.155 a cargo del cliente.</p>
+          <p><strong>Documentación requerida:</strong> Declaraciones juradas UIF, salud, y datos del solicitante.</p>
+          <p><strong>Precios:</strong> Tomados de la Lista de Precios de Fábrica.</p>
+          <p><strong>Presentar:</strong> fotocopia de DNI (frente y dorso).</p>
+          
+          <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+            <h5 class="font-semibold mb-2">Información Legal</h5>
+            <p class="text-sm text-gray-600">
+              <strong>Agro Plan S.A. de Ahorro y Préstamo para Fines Determinados.</strong><br>
+              Personería Jurídica acordada por la Dirección de Personas Jurídicas de la Provincia de Buenos Aires Matrícula N° 17.242 del 14.09.84.<br>
+              Inscripto en el registro de Sociedades por Acciones de la Inspección General de Justicia de la Nación el 13.10.04, libro 26, Numero 12.768.
+            </p>
+          </div>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Modal de imagen ampliada (catálogo) -->
+  <dialog id="img-modal" class="rounded-xl max-w-6xl w-[96%] p-0">
+    <form method="dialog" class="p-0">
+      <div class="flex items-center justify-between p-2 border-b">
+        <span class="text-sm text-brand-gray px-2">Vista ampliada</span>
+        <button class="px-3 py-1 rounded bg-brand.silver/40">Cerrar</button>
+      </div>
+      <div class="bg-black">
+        <img id="img-full" src="" alt="" class="max-h-[85vh] w-auto mx-auto">
+      </div>
+    </form>
+  </dialog>
+
+<script src="https://cdn.jsdelivr.net/gh/robalomelanny27/grupozzetto/app.js"></script>
+
+</body>
+</html>
